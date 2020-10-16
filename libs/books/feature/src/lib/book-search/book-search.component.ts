@@ -59,4 +59,9 @@ export class BookSearchComponent implements OnInit {
       this.store.dispatch(clearSearch());
     }
   }
+
+  clearSearch(){
+    this.searchForm.setValue({term: ''});
+    this.store.dispatch(clearSearch());
+  }
 }
