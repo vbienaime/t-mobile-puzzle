@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { auditTime } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
@@ -22,6 +24,8 @@ export class BookSearchComponent implements OnInit {
     term: ''
   });
 
+  triggerInstantSearch: Subject<void> = new Subject<void>();
+
   constructor(
     private readonly store: Store,
     private readonly fb: FormBuilder
@@ -35,6 +39,8 @@ export class BookSearchComponent implements OnInit {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
+
+    this.triggerInstantSearch.pipe(auditTime(500)).subscribe(() => this.searchBooks());
   }
 
   formatDate(date: void | string) {
@@ -63,5 +69,9 @@ export class BookSearchComponent implements OnInit {
   clearSearch(){
     this.searchForm.setValue({term: ''});
     this.store.dispatch(clearSearch());
+  }
+
+  onSearchTermKeyUp(){
+    this.triggerInstantSearch.next();
   }
 }
