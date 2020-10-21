@@ -1,4 +1,4 @@
-import { $, $$, browser, By, ExpectedConditions } from 'protractor';
+import { $, $$, browser, ExpectedConditions } from 'protractor';
 
 describe('When: Use the search feature', () => {
   it('Then: I should be able to search books by title', async () => {
@@ -23,20 +23,10 @@ describe('When: Use the search feature', () => {
     );
 
     const input = await $('input[type="search"]');
+    await input.sendKeys('angular');
 
-    await input.sendKeys('ang');
-    const angBookItems = await $$('[data-testing="book-item"]');
-    const angFirstResult = angBookItems[0]?.getWebElement();
-    const angFirstResultTitle = await angFirstResult?.findElement(By.className('book--title')).getText();
-    
-    await input.sendKeys('ular');
-    const angularBookItems = await $$('[data-testing="book-item"]');
-    const angularFirstResult = angularBookItems[0]?.getWebElement();
-    const angularFirstResultTitle = await angularFirstResult?.findElement(By.className('book--title')).getText();
+    const items = await $$('[data-testing="book-item"]');
+    expect(items.length).toBeGreaterThan(1);
 
-    expect(angFirstResultTitle.length).toBeGreaterThan(1);
-    expect(angularFirstResultTitle.length).toBeGreaterThan(1);
-    expect(angFirstResultTitle).not.toBe(angularFirstResultTitle);
-    
   });
 });

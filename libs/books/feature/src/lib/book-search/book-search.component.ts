@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { auditTime } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
@@ -17,19 +17,19 @@ import { Book } from '@tmo/shared/models';
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
 })
-export class BookSearchComponent implements OnInit {
+export class BookSearchComponent implements OnInit, OnDestroy {
   books: ReadingListBook[];
 
   searchForm = this.fb.group({
     term: ''
   });
 
-  triggerInstantSearch: Subject<void> = new Subject<void>();
+  searchFormValueChangeSubscription: Subscription;
 
   constructor(
     private readonly store: Store,
     private readonly fb: FormBuilder
-  ) {}
+  ) { }
 
   get searchTerm(): string {
     return this.searchForm.value.term;
@@ -40,7 +40,11 @@ export class BookSearchComponent implements OnInit {
       this.books = books;
     });
 
-    this.triggerInstantSearch.pipe(auditTime(500)).subscribe(() => this.searchBooks());
+    this.searchFormValueChangeSubscription = this.searchForm.get('term').valueChanges.pipe(debounceTime(500)).subscribe(() => this.searchBooks());
+  }
+
+  ngOnDestroy(): void {
+    this.searchFormValueChangeSubscription?.unsubscribe();
   }
 
   formatDate(date: void | string) {
@@ -66,12 +70,9 @@ export class BookSearchComponent implements OnInit {
     }
   }
 
-  clearSearch(){
-    this.searchForm.setValue({term: ''});
+  clearSearch() {
+    this.searchForm.setValue({ term: '' });
     this.store.dispatch(clearSearch());
   }
 
-  onSearchTermKeyUp(){
-    this.triggerInstantSearch.next();
-  }
 }
