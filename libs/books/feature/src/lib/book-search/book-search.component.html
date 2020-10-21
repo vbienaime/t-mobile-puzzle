@@ -24,7 +24,7 @@
       </div>
       <div class="book--content">
         <div class="book--content--cover">
-          <img src="{{ b.coverUrl }}" />
+          <img src="{{ b.coverUrl }}" alt="Book Cover"/>
         </div>
         <div class="book--content--info">
           <div><strong>Author:</strong> {{ b.authors.join(',') }}</div>
@@ -37,7 +37,6 @@
             <button
               mat-flat-button
               color="primary"
-              aria-label="Add Book To Reading List"
               (click)="addBookToReadingList(b)" 
               [disabled]="b.isAdded"
               >
@@ -52,7 +51,7 @@
 <ng-template #empty>
   <div class="empty">
     <p>
-      Try searching for a topic, for example "<a aria-label="Search for JavaScript"
+      Try searching for a topic, for example "<a role="link"
       (click)="searchExample()">JavaScript</a>".
     </p>
   </div>

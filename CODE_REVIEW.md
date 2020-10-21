@@ -11,6 +11,20 @@
 * In terms of functionality, I would add a button to clear the search input. As of now, you need to manually backspace the input if you want to clear the field.
     * I added this feature
 
+* BookSearchComponent: I noticed there is a difference in how we are subscribing to data store changes. In this component, we are:
+
+        this.store.select(getAllBooks).subscribe(books => {
+            this.books = books;
+            });
+    In ReadingListCompnent, we subscribe to the store:
+    
+    ```
+    readingList$ = this.store.select(getReadingList);
+    ```
+
+* Reading List Effects: I can not tell if this subtle difference in RxJs operators has an intended purpose:
+    * I noticed we are using 'exhaustMap' operator when fetching the list but we're using the 'concatMap' operator when we're posting to the list.
+
 ## Accessibility ##
 
 ### Automated ###
