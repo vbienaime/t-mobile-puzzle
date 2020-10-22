@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
+  undoAddToReadingList,
   clearSearch,
   getAllBooks,
   ReadingListBook,
@@ -24,8 +26,9 @@ export class BookSearchComponent implements OnInit {
 
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
-  ) {}
+    private readonly fb: FormBuilder,
+    private readonly snackBar: MatSnackBar
+  ) { }
 
   get searchTerm(): string {
     return this.searchForm.value.term;
@@ -45,6 +48,7 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
+    this.displayUndoSnackbar(book);
   }
 
   searchExample() {
@@ -60,8 +64,14 @@ export class BookSearchComponent implements OnInit {
     }
   }
 
-  clearSearch(){
-    this.searchForm.setValue({term: ''});
+  clearSearch() {
+    this.searchForm.setValue({ term: '' });
     this.store.dispatch(clearSearch());
+  }
+
+  displayUndoSnackbar(book: Book): void {
+    const msg = `Added '${book.title}'`;
+    const snackbar = this.snackBar.open(msg, 'Undo');
+    snackbar.onAction().subscribe(() => this.store.dispatch(undoAddToReadingList({ book })));
   }
 }
