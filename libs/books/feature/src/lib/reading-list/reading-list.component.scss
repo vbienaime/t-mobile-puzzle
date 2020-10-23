@@ -34,7 +34,9 @@
 }
 
 .reading-list-item--details--title,
-.reading-list-item--details--author {
+.reading-list-item--details--author,
+.reading-list-item--details--finished
+ {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

@@ -39,8 +39,18 @@
               color="primary"
               (click)="addBookToReadingList(b)" 
               [disabled]="b.isAdded"
+              *ngIf="!b?.isFinished"
               >
               Want to Read
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="addBookToReadingList(b)" 
+              [disabled]="b?.isFinished"
+              *ngIf="b?.isFinished"
+              >
+              Finished
             </button>
           </div>
         </div>
