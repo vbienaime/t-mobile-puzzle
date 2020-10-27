@@ -31,7 +31,7 @@ describe('When: I use the reading list feature', () => {
 
     // Add Book to List
     const items = await $$('[data-testing="book-item"]').first();
-    await items.getWebElement().findElement(By.tagName('button')).click();
+    await items.$$('[data-testing="add-book"]').first().click();
 
     // Open list
     const readingListToggle = await $('[data-testing="toggle-reading-list"]');
@@ -47,5 +47,10 @@ describe('When: I use the reading list feature', () => {
         'Finished on'
       )
     );
+
+    // Clear State
+    const removeButton = await $$('[data-testing="reading-list-content"]').first().getWebElement().findElement(By.css('.reading-list-item--details--remove-button'));
+    await removeButton.click();
+
   });
 });

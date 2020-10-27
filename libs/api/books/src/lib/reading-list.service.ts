@@ -29,16 +29,20 @@ export class ReadingListService {
     });
   }
 
-  async markBookAsFinished(id: string): Promise<ReadingListItem> {
+  markBookAsFinished(id: string): ReadingListItem {
     let response: ReadingListItem = null;
-    this.storage.update(list => {
-      const item = list.find(x => x.bookId === id);
-      if (item) {
-        item.finished = true;
-        item.finishedDate = new Date().toISOString();
-        response = item;
-      }
-      return list;
+    this.storage.update((list) => {
+      return list.map((x) => {
+        if (x.bookId === id) {
+          const updatedItem = {
+            finished: true,
+            finishedDate: new Date().toISOString(),
+            ...x,
+          };
+          response = updatedItem;
+          return updatedItem;
+        } else return x;
+      });
     });
     return response;
   }

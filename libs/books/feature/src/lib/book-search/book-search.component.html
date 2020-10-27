@@ -24,7 +24,7 @@
       </div>
       <div class="book--content">
         <div class="book--content--cover">
-          <img src="{{ b.coverUrl }}" alt="Book Cover"/>
+          <img src="{{ b.coverUrl }}" alt=""/>
         </div>
         <div class="book--content--info">
           <div><strong>Author:</strong> {{ b.authors.join(',') }}</div>
@@ -37,6 +37,7 @@
             <button
               mat-flat-button
               color="primary"
+              data-testing="add-book"
               (click)="addBookToReadingList(b)" 
               [disabled]="b.isAdded"
               *ngIf="!b?.isFinished"
