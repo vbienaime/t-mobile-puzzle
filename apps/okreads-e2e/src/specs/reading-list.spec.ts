@@ -33,7 +33,7 @@ describe('When: I use the undo feature in the reading list feature', () => {
 
     // Add Book to List
     const items = await $$('[data-testing="book-item"]').first();
-    await items.getWebElement().findElement(By.tagName('button')).click();
+    await items.$$('[data-testing="add-book"]').first().click();
 
     // Open list
     const readingListToggle = await $('[data-testing="toggle-reading-list"]');
@@ -41,7 +41,7 @@ describe('When: I use the undo feature in the reading list feature', () => {
     const readingListCountBefore = await $$('[data-testing="reading-list-content"]').first().all(By.css('.reading-list-item')).length;
 
     // Remove Book
-    const removeBookButton = await $$('[data-testing="reading-list-content"]').first().getWebElement().findElement(By.tagName('button'));
+    const removeBookButton = await $$('[data-testing="reading-list-content"]').first().$$('[data-testing="remove-book"]').first();
     await removeBookButton.click();
 
     // Undo Removal of Book
@@ -51,6 +51,8 @@ describe('When: I use the undo feature in the reading list feature', () => {
 
     expect(readingListCountBefore).toEqual(readingListCountAfter);
 
+    // Clear state
+    await removeBookButton.click();
   });
 
 });

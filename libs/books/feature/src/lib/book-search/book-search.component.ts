@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
+import { Subscription } from 'rxjs';
 import {
   addToReadingList,
   undoAddToReadingList,
+  confirmedAddToReadingList,
   clearSearch,
   getAllBooks,
   ReadingListBook,
@@ -17,18 +20,21 @@ import { Book } from '@tmo/shared/models';
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
 })
-export class BookSearchComponent implements OnInit {
+export class BookSearchComponent implements OnInit, OnDestroy {
   books: ReadingListBook[];
 
   searchForm = this.fb.group({
     term: ''
   });
 
+  subscription: Subscription;
+
   constructor(
     private readonly store: Store,
     private readonly fb: FormBuilder,
-    private readonly snackBar: MatSnackBar
-  ) { }
+    private readonly snackBar: MatSnackBar,
+    private readonly actions$: Actions
+  ) {}
 
   get searchTerm(): string {
     return this.searchForm.value.term;
@@ -38,6 +44,14 @@ export class BookSearchComponent implements OnInit {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
+
+    this.subscription = this.actions$
+      .pipe(ofType(confirmedAddToReadingList))
+      .subscribe(({ book }) => this.displayUndoSnackbar(book));
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   formatDate(date: void | string) {
@@ -48,7 +62,6 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
-    this.displayUndoSnackbar(book);
   }
 
   searchExample() {
