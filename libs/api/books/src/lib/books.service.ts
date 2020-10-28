@@ -9,7 +9,7 @@ export class BooksService {
 
   search(term: string): Observable<Book[]> {
     if (!term) {
-      throw new Error('Missing serach term');
+      throw new Error('Missing search term');
     }
 
     return this.http
