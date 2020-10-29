@@ -39,19 +39,9 @@
               color="primary"
               data-testing="add-book"
               (click)="addBookToReadingList(b)" 
-              [disabled]="b.isAdded"
-              *ngIf="!b?.isFinished"
+              [disabled]="b?.isAdded || b?.isFinished"
               >
-              Want to Read
-            </button>
-            <button
-              mat-flat-button
-              color="primary"
-              (click)="addBookToReadingList(b)" 
-              [disabled]="b?.isFinished"
-              *ngIf="b?.isFinished"
-              >
-              Finished
+              {{ b?.isFinished? "Finished" : "Want to Read" }}
             </button>
           </div>
         </div>

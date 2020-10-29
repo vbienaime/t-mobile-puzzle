@@ -31,14 +31,14 @@ describe('When: I use the reading list feature', () => {
 
     // Add Book to List
     const items = await $$('[data-testing="book-item"]').first();
-    await items.$$('[data-testing="add-book"]').first().click();
+    await items.$('[data-testing="add-book"]').click();  
 
     // Open list
     const readingListToggle = await $('[data-testing="toggle-reading-list"]');
     await readingListToggle.click();
 
     // Mark Book as Finished
-    const markFinishedButton = await $$('[data-testing="reading-list-content"]').first().getWebElement().findElement(By.css('.reading-list-item--details--complete-button'));
+    const markFinishedButton = await $('[data-testing="reading-list-content"]').$('.reading-list-item--details--complete-button');
     await markFinishedButton.click();
 
     await browser.wait(
@@ -49,7 +49,7 @@ describe('When: I use the reading list feature', () => {
     );
 
     // Clear State
-    const removeButton = await $$('[data-testing="reading-list-content"]').first().getWebElement().findElement(By.css('.reading-list-item--details--remove-button'));
+    const removeButton = await $('[data-testing="reading-list-content"]').$('.reading-list-item--details--remove-button');
     await removeButton.click();
 
   });
