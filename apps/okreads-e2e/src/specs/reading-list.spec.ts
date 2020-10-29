@@ -38,16 +38,16 @@ describe('When: I use the undo feature in the reading list feature', () => {
     // Open list
     const readingListToggle = await $('[data-testing="toggle-reading-list"]');
     await readingListToggle.click();
-    const readingListCountBefore = await $$('[data-testing="reading-list-content"]').first().all(By.css('.reading-list-item')).length;
+    const readingListCountBefore = await $('[data-testing="reading-list-content"]').all(By.css('.reading-list-item')).length;
 
     // Remove Book
-    const removeBookButton = await $$('[data-testing="reading-list-content"]').first().$$('[data-testing="remove-book"]').first();
+    const removeBookButton = $$('[data-testing="remove-book"]').first();
     await removeBookButton.click();
 
     // Undo Removal of Book
     const undoButton = await $('.mat-simple-snackbar-action').getWebElement();
     await undoButton.click();
-    const readingListCountAfter = await $$('[data-testing="reading-list-content"]').first().all(By.css('.reading-list-item')).length;
+    const readingListCountAfter = await $('[data-testing="reading-list-content"]').all(By.css('.reading-list-item')).length;
 
     expect(readingListCountBefore).toEqual(readingListCountAfter);
 
